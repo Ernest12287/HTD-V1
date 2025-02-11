@@ -24,7 +24,8 @@ router.get('/dashboard/select-bot', isLoggedIn, async (req, res) => {
         const offset = (page - 1) * limit;
         const showFavorites = req.query.favorites === 'true';
         const userId = req.session.user.id;
-        
+ console.log('Views directory:', express.get('views')); // Debugging
+
         let query = `
             SELECT 
                 b.*,
