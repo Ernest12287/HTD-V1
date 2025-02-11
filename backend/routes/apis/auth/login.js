@@ -169,16 +169,16 @@ router.post('/login', async (req, res) => {
         const deviceId = crypto.randomUUID();
 
         // Check for existing verified device with timeout
-        const [knownDevices] = await connection.query(
-            `SELECT id, device_info, last_used 
-             FROM user_devices 
-             WHERE user_id = ? 
-             AND device_info = ? 
-             AND is_verified = 1
-             AND last_used > DATE_SUB(NOW(), INTERVAL 30 DAY)
-             FOR UPDATE SKIP LOCKED`,
-            [user.id, JSON.stringify(deviceInfo)]
-        );
+     const [knownDevices] = await connection.query(
+    `SELECT id, device_info, last_used 
+     FROM user_devices 
+     WHERE user_id = ? 
+     AND device_info = ? 
+     AND is_verified = 1
+     AND last_used > DATE_SUB(NOW(), INTERVAL 30 DAY)
+     FOR UPDATE`,
+    [user.id, JSON.stringify(deviceInfo)]
+);
 
         if (knownDevices.length > 0) {
             // Known device - proceed with login
