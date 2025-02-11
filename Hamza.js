@@ -42,6 +42,9 @@ app.use(session({
 // Static Files and Views
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('public'));
+// Set the views directory
+app.set('views', path.join(__dirname, 'views'));
+// Set the templating engine (e.g., EJS)
 app.set('view engine', 'ejs');
 
 // Importing all modules::::::: (routes)""""""""""""""""""""""
