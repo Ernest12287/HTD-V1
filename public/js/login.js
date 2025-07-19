@@ -1,19 +1,19 @@
 
-// Initialize form elements
-// Initialize form elements
+
+
 const loginForm = document.getElementById('loginForm');
 const emailInput = document.getElementById('loginEmail');
 const submitButton = document.getElementById('submitButton');
 
-// Reusable function to validate email
+
 function validateEmail(email) {
 const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 return re.test(String(email).toLowerCase());
 }
 
-// Global variable to track cooldown status
+
 let isInCooldown = false;
-const COOLDOWN_DURATION = 60000; // 60 seconds cooldown
+const COOLDOWN_DURATION = 60000; 
 
 loginForm.addEventListener('submit', async (e) => {
 e.preventDefault();
@@ -21,7 +21,7 @@ e.preventDefault();
 submitButton.disabled = true;
 submitButton.innerHTML = 'Logging in... <div class="loading"></div>';
 
-// Corrected: use the correct input ID
+
 const email = document.getElementById('phoneNumber').value.trim();
 if (!validateEmail(email)) {
     showToast('Please enter a valid email address', 'error');
@@ -30,7 +30,7 @@ if (!validateEmail(email)) {
     return;
 }
 
-// Store login email in sessionStorage
+
 sessionStorage.setItem('loginEmail', email);
 
 const password = document.getElementById('password').value;
@@ -86,7 +86,7 @@ const verifyButton = document.getElementById('verifyButton');
 verifyButton.disabled = true;
 verifyButton.innerHTML = 'Verifying... <div class="loading"></div>';
 
-// Retrieve login email from session storage
+
 const loginEmail = sessionStorage.getItem('loginEmail');
 
 if (!loginEmail) {
@@ -108,7 +108,7 @@ try {
     const data = await response.json();
 
     if (response.ok) {
-        // Clear stored login email
+        
         sessionStorage.removeItem('loginEmail');
 
         showToast('Login successful! Redirecting...', 'success');
@@ -129,18 +129,18 @@ try {
 }
 });
 
-// Verification input setup function
+
 function setupVerificationInputs() {
 const inputs = document.querySelectorAll('#verificationForm .verification-input');
 
 inputs.forEach((input, index) => {
-    // Clear any existing values
+    
     input.value = '';
 
     // Handle input
     input.addEventListener('input', (e) => {
-        // Restrict to numbers only
-// Allow alphanumeric input
+        
+
 e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, '').slice(0, 1);
         
         if (e.target.value.length === 1) {
@@ -156,7 +156,7 @@ e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, '').slice(0, 1);
         }
     });
 
-    // Handle keydown
+    
     input.addEventListener('keydown', (e) => {
         if (e.key === 'Backspace') {
             if (e.target.value.length === 0 && index > 0) {
@@ -203,13 +203,13 @@ e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, '').slice(0, 1);
 
 
 
-// Clear password on page unload
+
 window.addEventListener('unload', () => {
-// Clear any sensitive data
+
 sessionStorage.removeItem('loginEmail');
 });
 
-// Add "Forgot Password?" link to login form
+
 const forgotPasswordLink = document.createElement('a');
 const logo = document.querySelector('.logo');
 const loginFooter  = document.querySelector('.login-footer');
@@ -218,7 +218,7 @@ forgotPasswordLink.className = 'forgot-password-link';
 forgotPasswordLink.textContent = 'Forgot Password?';
 document.querySelector('.form-group:last-of-type').appendChild(forgotPasswordLink);
 
-// Show reset container
+
 forgotPasswordLink.addEventListener('click', (e) => {
     e.preventDefault();
     logo.style.display = 'none';
@@ -227,7 +227,7 @@ forgotPasswordLink.addEventListener('click', (e) => {
     document.getElementById('resetPasswordContainer').style.display = 'block';
 });
 
-// Update request reset button handler with anti-spam
+
 document.getElementById('requestResetButton').addEventListener('click', async () => {
     const requestButton = document.getElementById('requestResetButton');
     const emailInput = document.getElementById('resetEmail');
@@ -238,7 +238,7 @@ document.getElementById('requestResetButton').addEventListener('click', async ()
         return;
     }
 
-    // Basic email validation
+    
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         showToast('Please enter a valid email address', 'error');
@@ -320,7 +320,7 @@ document.getElementById('verifyResetCodeButton').addEventListener('click', async
     }
 });
 
-// Reset password
+
 document.getElementById('resetPasswordButton').addEventListener('click', async () => {
     const emailInput = document.getElementById('resetEmail');
     const email = emailInput.value.trim();
@@ -336,7 +336,7 @@ document.getElementById('resetPasswordButton').addEventListener('click', async (
         return;
     }
 
-    // Password strength validation
+    
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(newPassword)) {
         showToast('Password must be at least 8 characters long and include lowercase, uppercase, numbers, and symbols', 'error');
@@ -365,13 +365,13 @@ document.getElementById('resetPasswordButton').addEventListener('click', async (
     }
 });
 
-// Initialize on DOM load
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Setup verification inputs
+    
     setupVerificationInputs('#verificationForm');
 });
 
-// Clear password on page unload
+
 window.addEventListener('unload', () => {
     storedPassword = '';
 });

@@ -1,4 +1,4 @@
-<!-- views/admin/dashboard.ejs -->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,19 +11,17 @@
         <div class="bg-white rounded-lg shadow p-6">
             <h2 class="text-xl font-semibold mb-4">Heroku API Keys Management</h2>
             
-            <!-- Add New API Key Form -->
+            
             <form id="addApiKeyForm" class="mb-8">
                 <div class="flex gap-4">
-                    <input type="text" id="apiKey" name="apiKey" placeholder="Enter Heroku API Key" 
-                           class="flex-1 p-2 border rounded" required>
-                    <button type="submit" 
-                            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    <input type="text" id="apiKey" name="apiKey" placeholder="Enter Heroku API Key" class="flex-1 p-2 border rounded" required>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                         Add API Key
                     </button>
                 </div>
             </form>
 
-            <!-- API Keys Table -->
+            
             <div class="overflow-x-auto">
                 <table class="min-w-full table-auto">
                     <thead>
@@ -36,7 +34,7 @@
                         </tr>
                     </thead>
                     <tbody id="apiKeysTable">
-                        <!-- API keys will be loaded here -->
+                        
                     </tbody>
                 </table>
             </div>

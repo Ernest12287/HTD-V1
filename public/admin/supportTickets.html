@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Support Ticket Admin Dashboard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <style>
@@ -260,7 +260,7 @@
     <div class="container">
         <h1 style="margin: 2rem 0">Support Ticket Dashboard</h1>
 
-        <!-- Statistics Grid -->
+        
         <div class="dashboard-grid">
             <div class="stat-card">
                 <h3>Total Tickets</h3>
@@ -280,7 +280,7 @@
             </div>
         </div>
 
-        <!-- Filters -->
+        
         <div class="filters">
             <select id="status-filter">
                 <option value="">All Status</option>
@@ -297,7 +297,7 @@
             <button onclick="applyFilters()">Apply Filters</button>
             <button onclick="showBulkUpdateModal()" style="margin-left: auto;">Bulk Update</button>
         </div>
-       <!-- Chat Modal -->
+       
        <div id="chat-modal" class="chat-modal" style="display: none;">
         <div class="chat-modal-content">
             <div class="chat-header">
@@ -306,16 +306,12 @@
             </div>
             <div class="chat-messages" id="chat-messages"></div>
             <div class="chat-input">
-                <input 
-                    type="text" 
-                    id="chat-message-input" 
-                    placeholder="Type a message..."
-                >
+                <input type="text" id="chat-message-input" placeholder="Type a message...">
                 <button onclick="sendChatMessage()">Send</button>
             </div>
         </div>
     </div>
-        <!-- Tickets Table -->
+        
         <table class="tickets-table">
             <thead>
                 <tr>
@@ -334,14 +330,14 @@
 
         <div class="pagination" id="pagination"></div>
 
-        <!-- Activity Log -->
+        
         <div class="activity-log">
             <h2 style="margin-bottom: 1rem">Recent Activity</h2>
             <div id="activity-log"></div>
         </div>
     </div>
 
-    <!-- Bulk Update Modal -->
+    
     <div id="bulk-update-modal" class="bulk-update-modal">
         <div class="modal-content">
             <h2>Bulk Update Tickets</h2>

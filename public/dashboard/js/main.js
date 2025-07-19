@@ -1,9 +1,9 @@
            
-// Add these global variables at the start of your script
+
 let selectedBots = new Set();
 let isSelectionMode = false;
 
-// Add this function to toggle selection mode
+
 function toggleSelectionMode() {
     isSelectionMode = !isSelectionMode;
     selectedBots.clear();
@@ -11,7 +11,7 @@ function toggleSelectionMode() {
     updateSelectionUI();
 }
 
-// Add this function to toggle individual bot selection
+
 function toggleBotSelection(botName, event) {
     event.stopPropagation();
     
@@ -25,7 +25,7 @@ function toggleBotSelection(botName, event) {
         selectedBots.add(botName);
     }
 
-  // Update UI to reflect selection
+  
   const botCard = document.querySelector(`[data-bot-name="${botName}"]`);
     if (botCard) {
         botCard.classList.toggle('selected', selectedBots.has(botName));
@@ -37,14 +37,14 @@ function toggleBotSelection(botName, event) {
     
     filterAndDisplayApps();
 }
-// Add function to cancel selection
+
 function cancelSelection() {
     isSelectionMode = false;
     selectedBots.clear();
     filterAndDisplayApps();
 }
 
-// Add this function to update the selection UI
+
 function updateSelectionUI() {
     const selectionControls = document.getElementById('selectionControls');
     if (!selectionControls) return;
@@ -83,14 +83,14 @@ async function deleteSelectedBots() {
             
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error(`Failed to delete ${botName}: ${errorText}`);  // More detailed error logging
+                console.error(`Failed to delete ${botName}: ${errorText}`);  
                 throw new Error(`Failed to delete ${botName}: ${errorText}`);
             }
             
-            console.log(`Successfully deleted bot: ${botName}`);  // Success logging
+            console.log(`Successfully deleted bot: ${botName}`);  
             return { botName, success: true };
         } catch (error) {
-            console.error(`Deletion error for ${botName}:`, error);  // Comprehensive error logging
+            console.error(`Deletion error for ${botName}:`, error);  
             return { botName, success: false, error: error.message };
         }
     });
@@ -99,7 +99,7 @@ async function deleteSelectedBots() {
     const successCount = results.filter(r => r.success).length;
     const failCount = results.filter(r => !r.success).length;
 
-    console.log('Deletion Results:', { successCount, failCount });  // Overall results logging
+    console.log('Deletion Results:', { successCount, failCount });  
 
     if (successCount > 0) {
         showNotification(`Successfully deleted ${successCount} bot${successCount > 1 ? 's' : ''}`);
@@ -112,7 +112,7 @@ async function deleteSelectedBots() {
     isSelectionMode = false;
     await fetchUserApps();
 }
-// Add this function to delete a single bot
+
 async function deleteSingleBot(botName, event) {
     event.stopPropagation();
     
@@ -135,7 +135,7 @@ async function deleteSingleBot(botName, event) {
   
             
 
-// Notification handling
+
 function showNotification(message, type = 'success') {
 const notification = document.querySelector(`.${type}`);
 notification.textContent = message;
@@ -148,8 +148,8 @@ notification.style.display = 'none';
 
 
 
-// Global variables for state management
-let allApps = []; // Store all apps for filtering
+
+let allApps = []; 
 let currentFilter = 'all';
 let searchQuery = '';
 let currentPage = 1;
@@ -163,7 +163,7 @@ loader.style.display = 'block';
 
 try {
 const controller = new AbortController();
-const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+const timeoutId = setTimeout(() => controller.abort(), 10000); 
 
 const response = await fetch('/user-apps', {
     signal: controller.signal,
@@ -181,7 +181,7 @@ if (!response.ok) {
 
 const newApps = await response.json();
 
-// Compare with existing apps to avoid unnecessary updates
+
 if (JSON.stringify(newApps) !== JSON.stringify(allApps)) {
     allApps = newApps;
     updateDashboardStats(allApps);
@@ -190,7 +190,7 @@ if (JSON.stringify(newApps) !== JSON.stringify(allApps)) {
 } catch (error) {
 if (error.name === 'AbortError') {
     showNotification('Request timed out. Retrying...', 'warning');
-    setTimeout(fetchUserApps, 1000); // Retry after 1 second
+    setTimeout(fetchUserApps, 1000); 
 } else {
     showNotification(error.message, 'error');
 }
@@ -204,8 +204,8 @@ function refreshDashboard() {
 }
 
 function showHelpModal() {
-    // Implement help modal functionality
-    // For now, we'll use a simple alert
+    
+    
     alert('Help section coming soon! Need assistance? Contact our support team.');
 }
 
@@ -259,7 +259,7 @@ return date.toLocaleDateString('en-US', {
 });
 }
 }
-// Update generatePageButtons to handle active state
+
 function generatePageButtons(totalPages) {
     let buttons = '';
     const maxVisiblePages = 5;
@@ -432,10 +432,10 @@ autoRefreshInterval = setInterval(() => {
                 }
             });
     }
-}, 15000); // Increased to 15 seconds to reduce server load
+}, 15000); 
 }
 }
-// Add exponential backoff for retries
+
 async function retryWithBackoff(fn, maxRetries = 3) {
 for (let i = 0; i < maxRetries; i++) {
 try {
@@ -488,10 +488,10 @@ currentPage = 1;
 displayUserApps(filteredApps);
 }
 
-// Event Listeners
+
 document.getElementById('searchInput').addEventListener('input', (e) => {
 searchQuery = e.target.value;
-currentPage = 1; // Reset to first page on search
+currentPage = 1; 
 filterAndDisplayApps();
 });
 
@@ -501,14 +501,14 @@ document.querySelectorAll('.filter-btn').forEach(b =>
     b.classList.remove('active'));
 btn.classList.add('active');
 currentFilter = btn.dataset.status;
-currentPage = 1; // Reset to first page on filter change
+currentPage = 1; 
 filterAndDisplayApps();
 });
 });
 
 
 
-// Initialize everything when the document loads
+
 document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('click', (e) => {
@@ -517,15 +517,15 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             const dropdown = actionBtn.closest('.dropdown');
             
-            // Close all other dropdowns
+            
             document.querySelectorAll('.dropdown.show').forEach(d => {
                 if (d !== dropdown) d.classList.remove('show');
             });
             
-            // Toggle current dropdown
+            
             dropdown.classList.toggle('show');
         } else if (!e.target.closest('.dropdown-content')) {
-            // Close all dropdowns when clicking outside
+            
             document.querySelectorAll('.dropdown.show').forEach(d => {
                 d.classList.remove('show');
             });
@@ -537,13 +537,13 @@ fetchUserApps();
 startAutoRefresh();
 
 
-// Optimize visibility change handler
+
 let visibilityTimeout;
 document.addEventListener('visibilitychange', () => {
 if (document.hidden) {
     stopAutoRefresh();
 } else {
-    // Debounce the refresh on tab visibility
+    
     clearTimeout(visibilityTimeout);
     visibilityTimeout = setTimeout(() => {
         startAutoRefresh();

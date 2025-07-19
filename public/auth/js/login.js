@@ -1,4 +1,4 @@
-// Reusable function to validate email
+
 function validateEmail(email) {
 const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 return re.test(String(email).toLowerCase());
@@ -6,14 +6,14 @@ return re.test(String(email).toLowerCase());
 
 
 
-// Initialize form elements
+
 const loginForm = document.getElementById('loginForm');
-const identifierInput = document.getElementById('loginIdentifier'); // Updated ID
+const identifierInput = document.getElementById('loginIdentifier'); 
 const submitButton = document.getElementById('submitButton');
 
-// Global variable to track cooldown status
+
 let isInCooldown = false;
-const COOLDOWN_DURATION = 60000; // 60 seconds cooldown
+const COOLDOWN_DURATION = 60000; 
 
 loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -29,7 +29,7 @@ loginForm.addEventListener('submit', async (e) => {
         return;
     }
 
-    // Store login identifier in sessionStorage
+    
     sessionStorage.setItem('loginIdentifier', identifier);
 
     const password = document.getElementById('password').value;
@@ -87,7 +87,7 @@ document.getElementById('verifyButton').addEventListener('click', async () => {
     verifyButton.disabled = true;
     verifyButton.innerHTML = 'Verifying... <div class="loading"></div>';
 
-    // Retrieve login identifier from session storage
+    
     const loginIdentifier = sessionStorage.getItem('loginIdentifier');
 
     if (!loginIdentifier) {
@@ -109,7 +109,7 @@ document.getElementById('verifyButton').addEventListener('click', async () => {
         const data = await response.json();
 
         if (response.ok) {
-            // Clear stored login identifier
+            
             sessionStorage.removeItem('loginIdentifier');
 
             showToast('Login successful! Redirecting...', 'success');
@@ -130,18 +130,18 @@ document.getElementById('verifyButton').addEventListener('click', async () => {
     }
 });
 
-// Verification input setup function
+
 function setupVerificationInputs() {
 const inputs = document.querySelectorAll('#verificationForm .verification-input');
 
 inputs.forEach((input, index) => {
-    // Clear any existing values
+    
     input.value = '';
 
     // Handle input
     input.addEventListener('input', (e) => {
-        // Restrict to numbers only
-// Allow alphanumeric input
+        
+
 e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, '').slice(0, 1);
         
         if (e.target.value.length === 1) {
@@ -157,7 +157,7 @@ e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, '').slice(0, 1);
         }
     });
 
-    // Handle keydown
+    
     input.addEventListener('keydown', (e) => {
         if (e.key === 'Backspace') {
             if (e.target.value.length === 0 && index > 0) {
@@ -204,13 +204,13 @@ e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, '').slice(0, 1);
 
 
 
-// Clear password on page unload
+
 window.addEventListener('unload', () => {
-// Clear any sensitive data
+
 sessionStorage.removeItem('loginEmail');
 });
 
-// Add "Forgot Password?" link to login form
+
 const forgotPasswordLink = document.createElement('a');
 const logo = document.querySelector('.logo');
 const loginFooter  = document.querySelector('.login-footer');
@@ -219,19 +219,19 @@ forgotPasswordLink.className = 'forgot-password-link';
 forgotPasswordLink.textContent = 'Forgot Password?';
 document.querySelector('.form-group:last-of-type').appendChild(forgotPasswordLink);
 
-// Show reset container
+
 forgotPasswordLink.addEventListener('click', (e) => {
     window.location.href = '/auth/reset-password'
 });
 
 
-// Initialize on DOM load
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Setup verification inputs
+    
     setupVerificationInputs('#verificationForm');
 });
 
-// Clear password on page unload
+
 window.addEventListener('unload', () => {
     storedPassword = '';
 });

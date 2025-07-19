@@ -1,13 +1,13 @@
 const deployForm = document.getElementById('deployForm');
 const outputDiv = document.getElementById('output');
-// Deploy bot function
+
 const deployBot = async () => {
     showLoader();
     const sessionId = document.getElementById('sessionId').value;
     const ownerNumber = document.getElementById('ownerNumber').value;
     const workType = document.getElementById('workType').value;
 
-    // Input validation
+    
     if (!sessionId || !ownerNumber || !workType) {
         outputDiv.innerHTML = '<p style="color: red;">All fields are required!</p>';
         hideLoader();
@@ -15,7 +15,7 @@ const deployBot = async () => {
     }
 
     const deployButton = document.getElementById('deployButton');
-    deployButton.disabled = true; // Disable the deploy button
+    deployButton.disabled = true; 
 
     try {
         const response = await fetch('/deploy', {
@@ -42,25 +42,25 @@ const deployBot = async () => {
         outputDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
     } finally {
         hideLoader();
-        deployButton.disabled = false; // Re-enable the deploy button
+        deployButton.disabled = false; 
     }
 };
 
-// Event listener for deploy button
+
 document.getElementById('deployButton').onclick = deployBot;
 
 
-// Show loading spinner
+
 function showLoader() {
     document.getElementById('loader').style.display = 'block';
 }
 
-// Hide loading spinner
+
 function hideLoader() {
     document.getElementById('loader').style.display = 'none';
 }
 
-// Check login and redirect to dashboard or login page
+
 const checkLogin = async () => {
     try {
         const response = await fetch('/check-login', { method: 'GET' });
@@ -72,5 +72,5 @@ const checkLogin = async () => {
     }
 };
 
-// Final login check
+
 checkLogin();

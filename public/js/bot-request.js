@@ -1,4 +1,4 @@
-// Move existing content into container div when DOM is loaded
+
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.querySelector('body');
     const bodyChildren = Array.from(document.body.children);
@@ -9,11 +9,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Initialize default environment variables
+    
     initializeEnvVars();
 });
 
-// Define default environment variables
+
 const defaultEnvVars = [
     {
         name: 'SESSION_ID',
@@ -29,11 +29,11 @@ const defaultEnvVars = [
     }
 ];
 
-// Function to initialize environment variables
+
 function initializeEnvVars() {
     const envVarsContainer = document.getElementById('envVarsContainer');
     
-    // Clear any existing content
+    
     envVarsContainer.innerHTML = '';
     
     // Add default environment variables
@@ -50,15 +50,15 @@ function initializeEnvVars() {
         envVarsContainer.appendChild(container);
     });
 
-    // Add initial empty variable group for custom entries
+    
     addEmptyEnvVar();
 }
 
-// Hide loading screen
+
 const loadingScreen = document.getElementById('loading-screen');
 loadingScreen.style.display = 'none';
 
-// Restore form data
+
 const savedFormData = localStorage.getItem('botRequestFormData');
 if (savedFormData) {
     const formData = JSON.parse(savedFormData);
@@ -70,7 +70,7 @@ if (savedFormData) {
     });
 }
 
-// Function to handle modal response
+
 function handleModalResponse(accepted) {
     const modal = document.getElementById('instructionsModal');
     const content = document.querySelector('.container');
@@ -83,13 +83,13 @@ function handleModalResponse(accepted) {
     }
 }
 
-// Notification handling
+
 function showNotification(message, type = 'success') {
-    // Remove any existing notifications
+    
     const existingNotifications = document.querySelectorAll('.success-message, .error-message');
     existingNotifications.forEach(notification => notification.remove());
 
-    // Create new notification
+    
     const notification = document.createElement('div');
     notification.className = type === 'success' ? 'success-message' : 'error-message';
     
@@ -103,12 +103,12 @@ function showNotification(message, type = 'success') {
     
     document.body.appendChild(notification);
 
-    // Trigger animation to show the notification
+    
     setTimeout(() => {
         notification.classList.add('show');
     }, 10);
 
-    // Auto-hide after 5 seconds
+    
     setTimeout(() => {
         notification.classList.remove('show');
         setTimeout(() => {
@@ -117,7 +117,7 @@ function showNotification(message, type = 'success') {
     }, 5000);
 }
 
-// Function to add empty environment variable
+
 function addEmptyEnvVar() {
     const container = document.createElement('div');
     container.className = 'env-var-group custom-env';
@@ -131,16 +131,16 @@ function addEmptyEnvVar() {
     document.getElementById('envVarsContainer').appendChild(container);
 }
 
-// Environment variables handling
+
 document.getElementById('addEnvVar').addEventListener('click', addEmptyEnvVar);
 
-// Form validation
+
 function validateRepoUrl(url) {
     const urlRegex = /^[a-zA-Z0-9-]+\/[a-zA-Z0-9-_.]+$/;
     return urlRegex.test(url);
 }
 
-// Form submission handling
+
 document.getElementById('botRequestForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
@@ -149,16 +149,16 @@ document.getElementById('botRequestForm').addEventListener('submit', async (e) =
     const deploymentCost = document.getElementById('deploymentCost').value;
     const websiteUrl = document.getElementById('websiteUrl').value;
 
-    // Validate repository URL
+    
     if (!validateRepoUrl(repoUrl)) {
         showNotification('Please enter a valid repository URL format (username/repository)', 'error');
         return;
     }
 
-    // Collect all environment variables (default + custom)
+    
     const envVars = [];
     
-    // Add default variables
+    
     document.querySelectorAll('.env-var-group.default-env').forEach(group => {
         const inputs = group.getElementsByTagName('input');
         envVars.push({
@@ -168,7 +168,7 @@ document.getElementById('botRequestForm').addEventListener('submit', async (e) =
         });
     });
 
-    // Add custom variables
+    
     document.querySelectorAll('.env-var-group.custom-env').forEach(group => {
         const inputs = group.getElementsByTagName('input');
         const name = inputs[0].value.trim();
@@ -182,7 +182,7 @@ document.getElementById('botRequestForm').addEventListener('submit', async (e) =
         }
     });
 
-    // Validate that we have at least one custom env var
+    
     if (envVars.length === defaultEnvVars.length) {
         showNotification('Please add at least one custom environment variable', 'error');
         return;
@@ -196,7 +196,7 @@ document.getElementById('botRequestForm').addEventListener('submit', async (e) =
         envVars
     };
 
-    // Show loading screen
+    
     const loadingScreen = document.getElementById('loading-screen');
     loadingScreen.style.display = 'flex';
 
@@ -217,7 +217,7 @@ document.getElementById('botRequestForm').addEventListener('submit', async (e) =
         const result = await response.json();
         showNotification('Bot request submitted successfully!', 'success');
 
-        // Reset form after successful submission
+        
         setTimeout(() => {
             resetForm();
         }, 3000);
@@ -228,15 +228,15 @@ document.getElementById('botRequestForm').addEventListener('submit', async (e) =
     }
 });
 
-// Form reset utility function
+
 function resetForm() {
     const form = document.getElementById('botRequestForm');
     form.reset();
 
-    // Reset environment variables to initial state
+    
     const envVarsContainer = document.getElementById('envVarsContainer');
     
-    // Clear all existing env vars
+    
     envVarsContainer.innerHTML = '';
     
     // Reinitialize with defaults and one empty custom var
@@ -246,19 +246,19 @@ function resetForm() {
     localStorage.removeItem('botRequestFormData');
 }
 
-// Add input validation for deployment cost
+
 document.getElementById('deploymentCost').addEventListener('input', function() {
     this.value = Math.max(0, Math.floor(this.value));
 });
 
-// Add input validation for website URL
+
 document.getElementById('websiteUrl').addEventListener('input', function() {
     if (this.value && !this.value.startsWith('http')) {
         this.value = 'https://' + this.value;
     }
 });
 
-// Add form autosave functionality
+
 const formInputs = document.querySelectorAll('input');
 formInputs.forEach(input => {
     input.addEventListener('change', () => {

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Bot Moderation Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -14,17 +14,9 @@
             
             <div class="flex flex-wrap gap-4 mb-6">
                 <div class="flex-1">
-                    <input 
-                        type="text" 
-                        id="search"
-                        placeholder="Search bots..."
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
+                    <input type="text" id="search" placeholder="Search bots..." class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <select 
-                    id="status-filter"
-                    class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
+                <select id="status-filter" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="all">All Status</option>
                     <option value="active">Active</option>
                     <option value="suspended">Suspended</option>

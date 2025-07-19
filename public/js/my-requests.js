@@ -1,4 +1,4 @@
-// my-requests.js
+
 document.addEventListener('DOMContentLoaded', () => {
     loadRequests();
     
@@ -72,7 +72,7 @@ function editRequest(requestId) {
     const modal = document.getElementById('editModal');
     modal.style.display = 'block';
     
-    // Load request details and populate form
+    
     fetch(`/my-bot-requests/${requestId}`)
         .then(response => response.json())
         .then(request => {
@@ -81,7 +81,7 @@ function editRequest(requestId) {
             document.getElementById('editWebsiteUrl').value = request.website_url || '';
             document.getElementById('editDeploymentCost').value = request.deployment_cost;
             
-            // Populate social links
+            
             const socialLinksContainer = document.getElementById('editSocialLinksContainer');
             socialLinksContainer.innerHTML = '';
             request.social_links.forEach(link => addSocialLinkField(link));
@@ -110,7 +110,7 @@ function addSocialLinkField(link = { type: '', url: '' }) {
     `;
     document.getElementById('editSocialLinksContainer').appendChild(container);
 }
-// Add env var field to edit form
+
 function addEnvVarField(env = { name: '', description: '' }) {
     const container = document.createElement('div');
     container.className = 'env-var-group';
@@ -122,35 +122,35 @@ function addEnvVarField(env = { name: '', description: '' }) {
     document.getElementById('editEnvVarsContainer').appendChild(container);
 }
 
-// Event listeners for add buttons
+
 document.querySelector('.add-link-btn').addEventListener('click', () => addSocialLinkField());
 document.querySelector('.add-env-btn').addEventListener('click', () => addEnvVarField());
 
-// Close modal functionality
+
 document.querySelector('.modal .close').addEventListener('click', () => {
     document.getElementById('editModal').style.display = 'none';
 });
 
-// Handle form submission
+
 document.getElementById('editRequestForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const requestId = document.getElementById('editRequestForm').dataset.requestId;
     
-    // Gather form data
+    
     const formData = {
         name: document.getElementById('editBotName').value,
         repoUrl: document.getElementById('editRepoUrl').value,
         websiteUrl: document.getElementById('editWebsiteUrl').value,
         deploymentCost: parseInt(document.getElementById('editDeploymentCost').value),
         
-        // Gather social links
+        
         socialLinks: Array.from(document.getElementById('editSocialLinksContainer').children).map(group => ({
             type: group.querySelector('select').value,
             url: group.querySelector('input[type="url"]').value
         })),
         
-        // Gather env vars
+        
         envVars: Array.from(document.getElementById('editEnvVarsContainer').children).map(group => {
             const inputs = group.querySelectorAll('input');
             return {
@@ -173,11 +173,11 @@ document.getElementById('editRequestForm').addEventListener('submit', async (e) 
             throw new Error(await response.text());
         }
 
-        // Close modal and reload requests
+        
         document.getElementById('editModal').style.display = 'none';
         loadRequests();
         
-        // Show success message
+        
         const successMessage = document.createElement('div');
         successMessage.className = 'success-message';
         successMessage.textContent = 'Bot request updated successfully!';
@@ -192,7 +192,7 @@ document.getElementById('editRequestForm').addEventListener('submit', async (e) 
     }
 });
 
-// Add CSS styles for the success message
+
 const style = document.createElement('style');
 style.textContent = `
     .success-message {

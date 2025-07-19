@@ -1,5 +1,5 @@
 
-// Notification handling
+
 function showNotification(message, type = 'success') {
     const notification = document.querySelector(`.${type}`);
     notification.textContent = message;
@@ -17,7 +17,7 @@ function showNotification(message, type = 'success') {
         await claimDailyCoins();
     });
     
-    // Initial check for claim status
+    
     checkClaimStatus();
     loadWalletInfo();
 
@@ -78,7 +78,7 @@ async function depositCoins() {
     const depositInput = document.getElementById('depositAmount');
     const amount = parseInt(depositInput.value);
 
-    // Validate the input amount
+    
     if (isNaN(amount) || amount <= 0) {
         alert('Please enter a valid positive number for the amount.');
         depositInput.value = ''; // Clear the input field
@@ -91,13 +91,13 @@ async function depositCoins() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ amount }), // Send amount as part of the request body
+            body: JSON.stringify({ amount }), 
         });
 
         const data = await response.json();
         if (response.ok) {
             alert(data.message);
-            loadWalletInfo(); // Update the wallet information
+            loadWalletInfo(); 
             depositInput.value = ''; // Clear the input field after successful deposit
         } else {
             alert(data.error);
@@ -118,14 +118,14 @@ function logout() {
 }
 
 
-// In your frontend JavaScript (wallet.html)
+
 let claimTimer;
 
 async function startClaimTimer(nextClaimTime) {
     const timerText = document.getElementById('nextClaimTimer');
     const claimButton = document.getElementById('claimCoinsBtn');
     
-    // Clear any existing timer
+    
     if (claimTimer) {
         clearInterval(claimTimer);
     }
@@ -143,7 +143,7 @@ async function startClaimTimer(nextClaimTime) {
             return;
         }
         
-        // Calculate time units
+        
         const hours = Math.floor(distance / (1000 * 60 * 60));
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
@@ -165,7 +165,7 @@ async function checkClaimStatus() {
             claimButton.disabled = false;
             claimButton.classList.remove('disabled');
             timerText.textContent = 'Coins are ready to claim!';
-            // Clear any existing timer
+            
             if (claimTimer) {
                 clearInterval(claimTimer);
             }
@@ -185,7 +185,7 @@ async function claimDailyCoins() {
     const timerText = document.getElementById('nextClaimTimer');
     
     try {
-        claimButton.disabled = true; // Disable button immediately to prevent double clicks
+        claimButton.disabled = true; 
         
         const response = await fetch('/claim-coins', {
             method: 'POST',
@@ -197,21 +197,21 @@ async function claimDailyCoins() {
         const data = await response.json();
         
         if (response.ok) {
-            // Update the coin balance
+            
             document.getElementById('coinBalance').textContent = data.currentCoins;
-            // Show success message
+            
             alert(data.message);
-            // Disable claim button and start timer
+            
             claimButton.classList.add('disabled');
             startClaimTimer(data.nextClaimTime);
         } else {
-            // If claim failed, re-enable button and show error
+            
             claimButton.disabled = false;
             claimButton.classList.remove('disabled');
             alert(data.message || 'Failed to claim coins');
         }
     } catch (error) {
-        // Only show error alert if it's a real error, not a failed claim
+        
         console.error('Error claiming coins:', error);
         claimButton.disabled = false;
         claimButton.classList.remove('disabled');
@@ -220,7 +220,7 @@ async function claimDailyCoins() {
 }
 
 
-// Update your updateCoinBalance function
+
 async function updateCoinBalance() {
     try {
         const response = await fetch('/user-coins');

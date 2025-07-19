@@ -99,9 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        if (!passwordRegex.test(newPassword)) {
-            showToast('Password must be at least 8 characters long and include lowercase, uppercase, numbers, and symbols', 'error');
+        
+        if (newPassword.length < 8) {
+            showToast('Password must be at least 8 characters long', 'error');
             return;
         }
 
@@ -199,18 +199,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    
     function showToast(message, type) {
-        // Implement toast notification logic
+        
+        let toast = document.querySelector('.toast-notification');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.className = 'toast-notification';
+            document.body.appendChild(toast);
+        }
+
+        
+        toast.textContent = message;
+        toast.className = `toast-notification toast-${type}`;
+        
+        
+        toast.style.display = 'block';
+        
+        
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 3000);
+        
+        
         console.log(`${type}: ${message}`);
     }
 
-    function toggleNewPassword() {
-        const type = newPasswordInput.type === 'password' ? 'text' : 'password';
-        newPasswordInput.type = type;
-    }
+    
+    window.toggleNewPassword = function() {
+        newPasswordInput.type = newPasswordInput.type === 'password' ? 'text' : 'password';
+    };
 
-    function toggleConfirmPassword() {
-        const type = confirmPasswordInput.type === 'password' ? 'text' : 'password';
-        confirmPasswordInput.type = type;
-    }
+    window.toggleConfirmPassword = function() {
+        confirmPasswordInput.type = confirmPasswordInput.type === 'password' ? 'text' : 'password';
+    };
 });

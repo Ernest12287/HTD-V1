@@ -13,7 +13,7 @@ function createSnowflake() {
     snowflake.classList.add('snowflake');
     snowflake.innerHTML = '❄';
     
-    const topOffset = Math.random() * 100 - 100; // Start above viewport
+    const topOffset = Math.random() * 100 - 100; 
     snowflake.style.top = topOffset + 'px';
     snowflake.style.left = Math.random() * 100 + 'vw';
     
@@ -36,16 +36,16 @@ function createSnowflake() {
 }
 
 function startSnow() {
-    for(let i = 0; i < 50; i++) { // Increased initial batch
+    for(let i = 0; i < 50; i++) { 
         setTimeout(createSnowflake, Math.random() * 2000);
     }
     
-    // Create dense snow at the top
+    
     setInterval(() => {
-        for(let i = 0; i < 3; i++) { // Create multiple snowflakes per interval
+        for(let i = 0; i < 3; i++) { 
             createSnowflake();
         }
-    }, 100); // Shorter interval for more density
+    }, 100); 
 }
 
 function stopSnow() {
@@ -55,7 +55,7 @@ function stopSnow() {
     }
 }
 
-// Toggle snow function
+
 const toggleSnow = () => {
     const isSnowing = document.body.classList.toggle('snowing');
     if(isSnowing) {
@@ -65,4 +65,4 @@ const toggleSnow = () => {
     }
 }
 
-toggleSnow(); // Start snow by default
+toggleSnow(); 

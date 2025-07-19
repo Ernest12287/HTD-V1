@@ -23,9 +23,9 @@ document.getElementById('ticketForm').addEventListener('submit', async (e) => {
 
         if (response.ok) {
             alert('Ticket created successfully!');
-            // Reset form
+            
             e.target.reset();
-            // Refresh ticket list
+            
             fetchTickets();
         } else {
             throw new Error(result.error || 'Failed to create ticket');
@@ -35,7 +35,7 @@ document.getElementById('ticketForm').addEventListener('submit', async (e) => {
     }
 });
 
-// Fetch and display tickets
+
 async function fetchTickets(page = 1, status = '', priority = '') {
     try {
         const queryParams = new URLSearchParams({
@@ -76,7 +76,7 @@ async function fetchTickets(page = 1, status = '', priority = '') {
             ticketListContainer.appendChild(ticketElement);
         });
 
-        // Add pagination
+        
         renderPagination(data.pagination);
     } catch (error) {
         console.error('Error fetching tickets:', error);
@@ -84,7 +84,7 @@ async function fetchTickets(page = 1, status = '', priority = '') {
     }
 }
 
-// Ticket replies:
+
 function escapeHtml(unsafe) {
     if (unsafe == null) {
         return '';
@@ -97,14 +97,14 @@ function escapeHtml(unsafe) {
         .replace(/'/g, "&#039;");
 }
 
-// Enhanced chat functionality with improved styling and username display
+
 async function fetchTicketChat(ticketId) {
     try {
         const response = await fetch(`/api/tickets/${ticketId}/chat`);
         const messages = await response.json();
 
-        // Get current user's ID from session (assuming it's available)
-        const currentUserId = getCurrentUserId(); // You'll need to implement this function
+        
+        const currentUserId = getCurrentUserId(); 
 
         const chatContainer = document.createElement('div');
         chatContainer.classList.add('ticket-chat');
@@ -134,13 +134,13 @@ async function fetchTicketChat(ticketId) {
             </div>
         `;
 
-        // Find the ticket modal content and append chat
+        
         const modalContent = document.querySelector('.ticket-modal-content');
         if (modalContent) {
             modalContent.appendChild(chatContainer);
         }
 
-        // Scroll to bottom of messages
+        
         const messagesContainer = document.getElementById('chatMessagesContainer');
         if (messagesContainer) {
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -150,7 +150,7 @@ async function fetchTicketChat(ticketId) {
     }
 }
 
-// Send a chat message
+
 async function sendChatMessage(ticketId) {
     const messageText = document.getElementById('chatMessageText').value.trim();
     if (!messageText) {
@@ -170,7 +170,7 @@ async function sendChatMessage(ticketId) {
         const result = await response.json();
 
         if (response.ok) {
-            // Clear input and refresh chat
+            
             document.getElementById('chatMessageText').value = '';
             fetchTicketChat(ticketId);
         } else {
@@ -182,14 +182,14 @@ async function sendChatMessage(ticketId) {
     }
 }
 
-// Helper function to get current user ID (implement based on your authentication system)
+
 function getCurrentUserId() {
-    // Check for session user object
+    
     if (window.session && window.session.user && window.session.user.id) {
         return window.session.user.id;
     }
 
-    // Check for localStorage fallback
+    
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
         try {
@@ -200,37 +200,37 @@ function getCurrentUserId() {
         }
     }
 
-    // Check for specific key storage methods
+    
     const userId = sessionStorage.getItem('userId');
     if (userId) {
         return userId;
     }
 
-    // If no user ID found, return null
+    
     return null;
 }
 
-// Helper function to format message time
+
 function formatMessageTime(timestamp) {
     const date = new Date(timestamp);
     const now = new Date();
 
-    // If message is from today, show time
+    
     if (date.toDateString() === now.toDateString()) {
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
-    // Otherwise, show date
+    
     return date.toLocaleDateString();
 }
 
-// View ticket details
+
 async function viewTicketDetails(ticketId) {
     try {
         const response = await fetch(`/api/support/tickets/${ticketId}`);
         const ticket = await response.json();
 
-        // Create a modal or detailed view
+        
         const modalHtml = `
             <div class="ticket-modal">
                 <div class="ticket-modal-content">
@@ -268,14 +268,14 @@ async function viewTicketDetails(ticketId) {
             </div>
         `;
 
-        // Create and append modal
+        
         const modalContainer = document.createElement('div');
         modalContainer.id = 'ticketModal';
         modalContainer.innerHTML = modalHtml;
         document.body.appendChild(modalContainer);
         fetchTicketChat(ticketId);
 
-        // Ensure the modal uses the CSS variables for theming
+        
         const modalStyle = document.createElement('style');
         modalStyle.textContent = `
             .ticket-modal {
@@ -312,7 +312,7 @@ async function viewTicketDetails(ticketId) {
     }
 }
 
-// Update ticket status
+
 async function updateTicketStatus(ticketId, status) {
     try {
         const response = await fetch(`/api/support/tickets/${ticketId}`, {
@@ -328,7 +328,7 @@ async function updateTicketStatus(ticketId, status) {
         if (response.ok) {
             alert(`Ticket marked as ${status}`);
             closeTicketModal();
-            fetchTickets(); // Refresh ticket list
+            fetchTickets(); 
         } else {
             throw new Error(result.error || 'Failed to update ticket');
         }
@@ -338,7 +338,7 @@ async function updateTicketStatus(ticketId, status) {
     }
 }
 
-// Close ticket modal
+
 function closeTicketModal() {
     const modal = document.getElementById('ticketModal');
     if (modal) {
@@ -346,7 +346,7 @@ function closeTicketModal() {
     }
 }
 
-// Render pagination
+
 function renderPagination(paginationData) {
     const paginationContainer = document.createElement('div');
     paginationContainer.classList.add('pagination');
@@ -363,10 +363,10 @@ function renderPagination(paginationData) {
     ticketListContainer.appendChild(paginationContainer);
 }
 
-// Initial load of tickets
+
 fetchTickets();
 
-// Add filtering capabilities
+
 document.getElementById('statusFilter').addEventListener('change', (e) => {
     fetchTickets(1, e.target.value);
 });

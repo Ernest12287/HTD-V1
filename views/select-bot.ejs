@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
+   
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Select a WhatsApp bot to deploy on Host.TalkDrove">
@@ -714,6 +715,327 @@ a{
     opacity: 0.6;
     pointer-events: none;
 }
+
+/* Modal Base */
+/* Comments Button Styling */
+.btn-comments {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 5;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-comments:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Modal Base */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.show {
+    display: flex;
+    opacity: 1;
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: var(--base-100);
+    color: var(--text-primary);
+    padding: 24px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+    margin: 0 auto;
+}
+
+.modal.show .modal-content {
+    transform: scale(1);
+}
+
+/* Modal Header */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--base-300);
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+.modal-header .close {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: var(--text-primary);
+    opacity: 0.7;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    padding: 4px 8px;
+    border-radius: 4px;
+    line-height: 1;
+}
+
+.modal-header .close:hover {
+    opacity: 1;
+    transform: scale(1.1);
+    background-color: var(--base-200);
+}
+
+/* Comments List */
+.comments-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    background-color: var(--base-200);
+    padding: 12px;
+}
+
+.comment {
+    margin-bottom: 12px;
+    padding: 12px;
+    border: 1px solid var(--base-300);
+    border-radius: 8px;
+    background-color: var(--base-100);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.comment:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.comment:last-child {
+    margin-bottom: 0;
+}
+
+.comment-author {
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+
+.comment-date {
+    font-size: 0.8em;
+    color: var(--text-primary);
+    opacity: 0.6;
+    margin-top: 6px;
+}
+
+/* Add Comment Section */
+.add-comment textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--base-300);
+    border-radius: 8px;
+    resize: vertical;
+    margin-bottom: 12px;
+    background-color: var(--base-200);
+    color: var(--text-primary);
+    min-height: 80px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.add-comment textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+}
+
+.add-comment button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.add-comment button:hover {
+    background-color: var(--accent);
+}
+
+.add-comment button:active {
+    transform: translateY(1px);
+}
+
+/* Custom Scrollbar for Comments List */
+.comments-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.comments-list::-webkit-scrollbar-track {
+    background: var(--base-200);
+    border-radius: 8px;
+}
+
+.comments-list::-webkit-scrollbar-thumb {
+    background-color: var(--base-300);
+    border-radius: 8px;
+}
+
+.comments-list::-webkit-scrollbar-thumb:hover {
+    background-color: var(--primary);
+}
+
+/* Modal Scrollbar */
+.modal-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: var(--base-200);
+    border-radius: 8px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background-color: var(--base-300);
+    border-radius: 8px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background-color: var(--primary);
+}
+
+/* Focus styles for accessibility */
+.modal-header .close:focus,
+.add-comment button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary);
+}
+
+/* Comment content styles */
+.comment-content {
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+/* Empty state for comments */
+.comments-list:empty::after {
+    content: "No comments yet. Be the first to add one!";
+    display: block;
+    text-align: center;
+    padding: 20px;
+    color: var(--text-primary);
+    opacity: 0.6;
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        padding: 16px;
+        max-height: 80vh;
+    }
+    
+    .modal-header h2 {
+        font-size: 1.2rem;
+    }
+    
+    .comments-list {
+        max-height: 250px;
+    }
+    
+    .comment {
+        padding: 10px;
+    }
+    
+    .add-comment textarea {
+        min-height: 60px;
+    }
+    
+    .bot-card {
+        padding-bottom: 3.5rem; /* Make space for the comments button */
+    }
+    
+    .btn-comments {
+        bottom: 0.75rem;
+        right: 0.75rem;
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Fix for most-deployed card layout */
+.bot-card.most-deployed .btn-comments {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+}
+
+/* Ensure buttons don't get cut off in different screen sizes */
+.bot-card {
+    padding-bottom: 3rem;
+    min-height: 150px;
+}
+
+/* Fix to prevent button from being covered by other elements */
+.bot-card .deployment-bar {
+    pointer-events: none;
+}
+
+/* Make sure the comments button is always clickable */
+.btn-comments {
+    pointer-events: auto;
+}
+
+/* Animation for comments modal */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal.show .modal-content {
+    animation: fadeInUp 0.3s ease forwards;
+}
     </style>
 </head>
 <body>
@@ -828,30 +1150,29 @@ a{
                     data-bot-name="<%= bot.name.toLowerCase() %>"
                     data-deployments="<%= bot.deployment_count %>"
                     data-favorite="<%= bot.is_favorite %>"
-                    onclick="selectBot(this, '<%= bot.id %>')"
+                    onclick="selectBot(this, '<%= bot.id %>', event)"
                 >
                     <div class="bot-header">
                         <i class="fas fa-robot bot-icon"></i>
-                   <!-- Updated bot-actions div -->
-<div class="bot-actions">
-    <button class="menu-dots" onclick="toggleMenu(event, '<%= bot.id %>')">
-        <i class="fas fa-ellipsis-v"></i>
-    </button>
-    <div class="menu-dropdown" id="menu-<%= bot.id %>">
-        <div class="menu-item" onclick="toggleFavorite(event, '<%= bot.id %>')">
-            <i class="fas fa-heart <%= bot.is_favorite ? 'active' : '' %>"></i>
-            <%= bot.is_favorite ? 'Remove from favorites' : 'Add to favorites' %>
-        </div>
-        <div class="menu-item" onclick="shareBot(event, '<%= bot.id %>')">
-            <i class="fas fa-share-alt"></i>
-            Share
-        </div>
-        <div class="menu-item" onclick="reportBot(event, '<%= bot.id %>')">
-            <i class="fas fa-flag"></i>
-            Report
-        </div>
-    </div>
-</div>
+                        <div class="bot-actions">
+                            <button class="menu-dots" onclick="toggleMenu(event, '<%= bot.id %>')">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <div class="menu-dropdown" id="menu-<%= bot.id %>">
+                                <div class="menu-item" onclick="toggleFavorite(event, '<%= bot.id %>')">
+                                    <i class="fas fa-heart <%= bot.is_favorite ? 'active' : '' %>"></i>
+                                    <%= bot.is_favorite ? 'Remove from favorites' : 'Add to favorites' %>
+                                </div>
+                                <div class="menu-item" onclick="shareBot(event, '<%= bot.id %>')">
+                                    <i class="fas fa-share-alt"></i>
+                                    Share
+                                </div>
+                                <div class="menu-item" onclick="reportBot(event, '<%= bot.id %>')">
+                                    <i class="fas fa-flag"></i>
+                                    Report
+                                </div>
+                            </div>
+                        </div>
                         <% if (index === 0) { %>
                             <div class="top-badge">
                                 <i class="fas fa-crown"></i> Most Deployed
@@ -875,11 +1196,38 @@ a{
                         </div>
                     </div>
                     <div class="deployment-bar" style="--deployment-percentage: <%= (bot.deployment_count / bots[0].deployment_count) * 100 %>%"></div>
+        
+                    <!-- Comments Button -->
+                    <button class="btn btn-secondary btn-comments" data-bot-id="<%= bot.id %>">
+                        <i class="fas fa-comments"></i> Comments
+                    </button>
                 </div>
+       
+     
             <% }); %>
             <div class="no-results">No bots found matching your search</div>
+            
         </div>
-    
+        
+                      <!-- Comments Modal -->
+<div id="commentsModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Comments</h2>
+            <button class="close" onclick="closeCommentsModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div id="commentsList" class="comments-list">
+                <!-- Comments will be loaded here dynamically -->
+            </div>
+            <div class="add-comment">
+                <textarea id="commentInput" placeholder="Add a comment..."></textarea>
+                <button class="btn btn-primary" onclick="submitComment()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+         
     
     </main>
     <% if (totalPages > 1) { %>
@@ -910,7 +1258,98 @@ a{
         </div>
     <% } %>
     <script>
+        let currentBotId = null;
 
+        function openCommentsModal(botId) {
+    currentBotId = botId;
+    const modal = document.getElementById('commentsModal');
+    modal.classList.add('show');
+    document.body.classList.add('modal-open');
+    loadComments(botId);
+}
+
+function closeCommentsModal() {
+    const modal = document.getElementById('commentsModal');
+    modal.classList.remove('show');
+    currentBotId = null;
+    document.getElementById('commentInput').value = '';
+    document.body.classList.remove('modal-open');
+}
+
+function loadComments(botId) {
+    fetch(`/api/bot-comments?botId=${botId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch comments');
+            }
+            return response.json();
+        })
+        .then(comments => {
+            const commentsList = document.getElementById('commentsList');
+            commentsList.innerHTML = comments.map(comment => `
+                <div class="comment">
+                    <div class="comment-author">${comment.username}</div>
+                    <div class="comment-date">${new Date(comment.created_at).toLocaleString()}</div>
+                    <div class="comment-text">${comment.comment}</div>
+                </div>
+            `).join('');
+        })
+        .catch(error => {
+            console.error('Error loading comments:', error);
+            showNotification('Failed to load comments', 'error');
+        });
+}
+function submitComment() {
+    const commentText = document.getElementById('commentInput').value.trim();
+    if (commentText && currentBotId) {
+        fetch('/api/bot-comments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ botId: currentBotId, comment: commentText }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to submit comment');
+            }
+            return response.json();
+        })
+        .then(() => {
+            loadComments(currentBotId); // Reload comments after submission
+            document.getElementById('commentInput').value = ''; // Clear the input
+            showNotification('Comment submitted successfully', 'success');
+        })
+        .catch(error => {
+            console.error('Error submitting comment:', error);
+            showNotification('Failed to submit comment', 'error');
+        });
+    }
+}
+// Event listener for comments button
+document.addEventListener('click', function(event) {
+    if (event.target.closest('.btn-comments')) {
+        event.preventDefault();
+        event.stopPropagation();
+        const botId = event.target.closest('.btn-comments').getAttribute('data-bot-id');
+        openCommentsModal(botId);
+    }
+});
+
+// Close modal when clicking outside
+document.addEventListener('click', function(event) {
+    const modal = document.getElementById('commentsModal');
+    if (event.target === modal) {
+        closeCommentsModal();
+    }
+});
+
+// Close modal when pressing Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeCommentsModal();
+    }
+});
 function showNotification(message, type = 'info') {
     // Create notification element if it doesn't exist
     let notification = document.getElementById('notification');
@@ -935,18 +1374,24 @@ function showNotification(message, type = 'info') {
     let selectedBotId = null;
     let showingFavorites = false;
     
-    function selectBot(card, botId) {
-        const previousSelected = document.querySelector('.bot-card.selected');
-        if (previousSelected) {
-            previousSelected.classList.remove('selected');
-        }
-        card.classList.add('selected');
-        selectedBotId = botId;
-        
-        // Redirect to deployment page
-        window.location.href = `/dashboard/select-bot/prepare-deployment?botId=${botId}`;
+// 5. Modified selectBot function to check for modal-open state
+function selectBot(card, botId, event) {
+    // Don't select bot if modal is open or if click came from comments button
+    if (document.body.classList.contains('modal-open') || 
+        (event && (event.target.closest('.btn-comments') || event.target.closest('.modal')))) {
+        return;
     }
-    
+
+    const previousSelected = document.querySelector('.bot-card.selected');
+    if (previousSelected) {
+        previousSelected.classList.remove('selected');
+    }
+    card.classList.add('selected');
+    selectedBotId = botId;
+
+    // Redirect to deployment page
+    window.location.href = `/dashboard/select-bot/prepare-deployment?botId=${botId}`;
+} 
 
 const style = document.createElement('style');
 style.textContent = `
@@ -1065,59 +1510,8 @@ function checkNoResults() {
     const noResults = document.querySelector('.no-results');
     noResults.style.display = visibleCards.length === 0 ? 'block' : 'none';
 }
-// First, add these styles to the document head immediately
-const winterStyle = document.createElement('style');
-winterStyle.textContent = `
-    .bot-name-container {
-        position: relative;
-        padding-top: 10px;
-        text-align: center;
-    }
-    .santa-hat {
-        position: absolute;
-        width: 40px;
-        height: 35px;
-        top: -18px;
-        left: 50%;
-        transform: translateX(-50%) rotate(-15deg);
-        pointer-events: none;
-        z-index: 2;
-    }
-    .bot-name {
-        position: relative;
-        z-index: 1;
-    }
-`;
-document.head.appendChild(winterStyle);
 
-// Function to wrap existing bot names with container and hat
-function addSantaHatsToExistingCards() {
-    const botCards = document.querySelectorAll('.bot-card');
-    botCards.forEach(card => {
-        const existingBotName = card.querySelector('.bot-name');
-        if (existingBotName && !card.querySelector('.bot-name-container')) {
-            const container = document.createElement('div');
-            container.className = 'bot-name-container';
-            
-            // Create Santa hat SVG
-            const hatSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-            hatSvg.classList.add('santa-hat');
-            hatSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-            hatSvg.setAttribute('viewBox', '0 0 50 40');
-            
-            hatSvg.innerHTML = `
-                <path d="M5 35 C15 35, 25 35, 40 35 C35 25, 30 15, 25 10 C20 15, 15 25, 5 35" fill="#D42426"/>
-                <path d="M5 35 C15 35, 25 35, 40 35 C40 33, 40 32, 40 31 C25 31, 15 31, 5 31 C5 32, 5 33, 5 35" fill="white"/>
-                <circle cx="25" cy="8" r="4" fill="white"/>
-            `;
-            
-            // Move the existing bot name into the new container
-            existingBotName.parentNode.replaceChild(container, existingBotName);
-            container.appendChild(hatSvg);
-            container.appendChild(existingBotName);
-        }
-    });
-}
+
 
 // Updated createBotCard function for search results
 function createBotCard(bot, botsArray) {
@@ -1182,14 +1576,14 @@ function createBotCard(bot, botsArray) {
 
 // Call this function when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    addSantaHatsToExistingCards();
+ 
     
     // Also call it after pagination changes
     const paginationLinks = document.querySelectorAll('.pagination-controls a');
     paginationLinks.forEach(link => {
         link.addEventListener('click', () => {
             // Short timeout to allow page to update
-            setTimeout(addSantaHatsToExistingCards, 100);
+        
         });
     });
 });

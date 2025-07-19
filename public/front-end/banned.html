@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Account Suspended | TalkDrove</title>
     <link rel="stylesheet" href="../nav/app.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
@@ -379,26 +379,17 @@
                 </div>
             </div>
 
-            <!-- Add this inside the banned-container div, before the contact-support div -->
+            
             <div class="appeal-form">
                 <h2>Submit an Appeal</h2>
                 <form id="appealForm" class="appeal-form-content">
                     <div class="form-group">
                         <label for="appealReason">Reason for Appeal</label>
-                        <textarea 
-                            id="appealReason" 
-                            name="appealReason" 
-                            required 
-                            placeholder="Please explain why your account should be unbanned..."
-                        ></textarea>
+                        <textarea id="appealReason" name="appealReason" required placeholder="Please explain why your account should be unbanned..."></textarea>
                     </div>
                     <div class="form-group">
                         <label for="additionalInfo">Additional Information</label>
-                        <textarea 
-                            id="additionalInfo" 
-                            name="additionalInfo" 
-                            placeholder="Provide any additional context or evidence..."
-                        ></textarea>
+                        <textarea id="additionalInfo" name="additionalInfo" placeholder="Provide any additional context or evidence..."></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary appeal-btn">
                         <i class="fas fa-paper-plane"></i> Submit Appeal
@@ -458,5 +449,5 @@ document.getElementById('appealForm').addEventListener('submit', async (e) => {
 </script>    
 
  <script src="../nav/app.js"></script>
-</body>
+</header></body>
 </html>

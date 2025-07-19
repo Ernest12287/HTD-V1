@@ -1081,7 +1081,7 @@ function t(t) {
       destroy: y
     };
   }
-  //EMojiiiiii cursor
+  
   function c(t) {
     const e = t && t.emoji || ["😀", "😂", "😆", "😊"];
     let n = t && t.element;
@@ -1414,7 +1414,7 @@ function t(t) {
       x: h / 2,
       y: h / 2
     };
-    // Rainbowwwwwwwwwwwwwwwwwwwwwwwwwww @HyHamza
+    
     let a = [];
     const r = t?.length || 20;
     const d = t?.colors || ["#FE0000", "#FD8C00", "#FFE500", "#119F0B", "#0644B3", "#C22EDC"];

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Bot Management Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -12,28 +12,17 @@
         <div class="bg-white rounded-lg shadow-md p-6 mb-6">
             <h1 class="text-2xl font-bold text-gray-800 mb-4">Bot Management Dashboard</h1>
             
-            <!-- Search and Filter Section -->
+            
             <div class="flex flex-wrap gap-4 mb-6">
                 <div class="flex-1">
-                    <input 
-                        type="text" 
-                        id="search"
-                        placeholder="Search bots..."
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
+                    <input type="text" id="search" placeholder="Search bots..." class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <select 
-                    id="status-filter"
-                    class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
+                <select id="status-filter" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="all">All Status</option>
                     <option value="active">Active</option>
                     <option value="suspended">Suspended</option>
                 </select>
-                <select 
-                    id="sort-by"
-                    class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
+                <select id="sort-by" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="created_at">Created Date</option>
                     <option value="updated_at">Updated Date</option>
                     <option value="name">Name</option>
@@ -41,7 +30,7 @@
                 </select>
             </div>
 
-            <!-- Stats Cards -->
+            
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div class="bg-blue-50 p-4 rounded-lg">
                     <h3 class="text-sm text-blue-600 mb-1">Total Bots</h3>
@@ -57,7 +46,7 @@
                 </div>
             </div>
 
-            <!-- Bots Table -->
+            
             <div class="overflow-x-auto">
                 <table class="min-w-full">
                     <thead class="bg-gray-50">
@@ -71,18 +60,15 @@
                         </tr>
                     </thead>
                     <tbody id="bots-list" class="bg-white divide-y divide-gray-200">
-                        <!-- Bots will be dynamically inserted here -->
+                        
                     </tbody>
                 </table>
             </div>
 
-            <!-- Pagination -->
+            
             <div class="flex items-center justify-between mt-4">
                 <div class="flex items-center">
-                    <select 
-                        id="page-size"
-                        class="px-3 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
+                    <select id="page-size" class="px-3 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
@@ -90,14 +76,14 @@
                     <span class="ml-2 text-sm text-gray-600">items per page</span>
                 </div>
                 <div id="pagination" class="flex items-center space-x-2">
-                    <!-- Pagination buttons will be dynamically inserted here -->
+                    
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Edit Bot Modal -->
-<!-- Edit Bot Modal -->
+    
+
 <div id="edit-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
     <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
         <div class="mt-3">
@@ -166,8 +152,6 @@
             };
         }
 
-
-        
         async function fetchBots() {
     try {
         const search = document.getElementById('search').value;

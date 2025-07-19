@@ -1,4 +1,4 @@
-// admin.js
+
 
 document.addEventListener('DOMContentLoaded', () => {
     loadUsers();
@@ -224,12 +224,12 @@ async function handleRequest(id, status) {
 
         const result = await response.json();
         alert(`Bot request ${status} successfully`);
-        loadBotRequests(); // Reload the list
+        loadBotRequests(); 
     } catch (error) {
         console.error('Error handling bot request:', error);
         alert('Failed to handle bot request');
     }
 }
 
-// Load bot requests when page loads
+
 document.addEventListener('DOMContentLoaded', loadBotRequests);

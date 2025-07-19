@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Payment Method Management</title>
     <link rel="stylesheet" href="../nav/app.css">
     <style>
@@ -447,7 +447,7 @@
             <input type="text" id="searchMethods" class="search-input" placeholder="Search payment methods...">
             <select id="countryFilter" class="country-select">
                 <option value="all">All Countries</option>
-                <!-- Countries will be populated via JavaScript -->
+                
             </select>
             <select id="statusFilter" class="status-filter">
                 <option value="all">All Status</option>
@@ -457,10 +457,10 @@
         </div>
 
         <div class="payment-methods-grid" id="paymentMethodsGrid">
-            <!-- Payment methods will be loaded here -->
+            
         </div>
 
-        <!-- Modal for adding/editing payment methods -->
+        
         <div class="modal" id="paymentMethodModal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -479,7 +479,7 @@
                         <label for="countryCode">Country</label>
                         <select id="countryCode" name="countryCode" class="form-control" required>
                             <option value="ALL">All Countries</option>
-                            <!-- Countries will be populated via JavaScript -->
+                            
                         </select>
                     </div>
 
@@ -497,10 +497,8 @@
                         <label>Instructions</label>
                         <div id="instructionsContainer">
                             <div class="instruction-item">
-                                <input type="text" class="form-control" name="instructions[]"
-                                    placeholder="Enter instruction">
-                                <button type="button" class="remove-instruction"
-                                    onclick="removeInstruction(this)">×</button>
+                                <input type="text" class="form-control" name="instructions[]" placeholder="Enter instruction">
+                                <button type="button" class="remove-instruction" onclick="removeInstruction(this)">×</button>
                             </div>
                         </div>
                         <button type="button" class="btn btn-add-instruction" onclick="addInstruction()">Add
@@ -522,7 +520,7 @@
         <div class="moderator-management-section">
             <h2>Moderator Management</h2>
             <div class="moderator-list" id="moderatorList">
-                <!-- Moderators will be loaded here -->
+                
             </div>
         </div>
         <div class="moderator-section">
@@ -530,17 +528,16 @@
             <form id="moderatorForm" class="moderator-form">
                 <div class="form-group">
                     <label for="phoneNumber">Phone Number</label>
-                    <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control"
-                        placeholder="Enter phone number" required>
+                    <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control" placeholder="Enter phone number" required>
                 </div>
                 <div class="form-group">
                     <label>Assigned Countries</label>
                     <select id="countrySelect" class="form-control">
-                        <!-- Countries will be populated via JavaScript -->
+                        
                     </select>
                     <button type="button" class="btn" onclick="addCountryToModerator()">Add Country</button>
                     <div id="selectedCountries" class="country-list">
-                        <!-- Selected countries will appear here -->
+                        
                     </div>
                 </div>
                 <button type="submit" class="btn btn-edit">Create Moderator</button>

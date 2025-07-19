@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Invite and earn free coins - H.TD</title>
     <link rel="stylesheet" href="https://cdn.talkdrove.com/host/styles/main/app.css">
-     <!-- Favicon -->
+     
      <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.talkdrove.com/host/Images/favicon/apple-touch-icon.png">
      <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.talkdrove.com/host/Images/favicon/favicon-32x32.png">
      <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.talkdrove.com/host/Images/favicon/favicon-16x16.png">
      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-     <!-- <link rel="stylesheet" href="../main.css"> -->
+     
     <style>
        
 
@@ -140,14 +140,12 @@
         <div class="header-content">
             <h1><a class="logo" href="/dashboard">H.TD</a></h1>
                     <nav class="nav-controls">
-                <button id="deployBotBtn" class="btn btn-primary"
-                    onclick="window.location.href='/dashboard/buy-heroku'">
+                <button id="deployBotBtn" class="btn btn-primary" onclick="window.location.href='/dashboard/buy-heroku'">
                     <i class="fas fa-shopping-cart"></i>
                     <span>Buy Heroku</span>
                 </button>
-                <!-- Add Bot Button with Dropdown -->
-                <button id="deployBotBtn" class="btn btn-primary"
-                    onclick="window.location.href='/dashboard/select-bot'">
+                
+                <button id="deployBotBtn" class="btn btn-primary" onclick="window.location.href='/dashboard/select-bot'">
                     <i class="fas fa-plus"></i>
                     <span>Deploy Bot</span>
                 </button>
@@ -155,7 +153,7 @@
                     <i class="fas fa-adjust"></i>
                 </button>
 
-                <!-- Profile Picture with Dropdown -->
+                
                 <div class="profile-container">
                     <img src="https://cdn.talkdrove.com/host/Images/profile.webp" alt="Profile" class="profile-pic" id="profileBtn">
                     <div class="dropdown" id="profileDropdown">
@@ -179,7 +177,7 @@
                                 <i class="fas fa-sign-out-alt"></i>
                                 <span>Logout</span>
                             </a>
-                    </div>
+                    </a></div>
                 </div>
             </nav>
         </div>
@@ -191,7 +189,7 @@
             <div class="card">
                 <h2 class="card-title">Your Referral Link</h2>
                 <div class="referral-link-container">
-                    <input type="text" id="referralLink" class="referral-input" readonly>
+                    <input type="text" id="referralLink" class="referral-input" readonly="readonly">
                     <button onclick="copyReferralLink()" class="copy-button">Copy Link</button>
                 </div>
                 <p>Share this link with your friends. Earn 10 coins for each successful referral!</p>
@@ -266,5 +264,5 @@
         }
     </script>
     <script src="https://cdn.talkdrove.com/host/js/main/app.js"></script>
-</body>
+</main></body>
 </html>

@@ -744,327 +744,583 @@ color: var(--neutral);
         <div class="loading-spinner"></div>
     </div>
 
-    <script>
-   
-
-    // Update the viewLogs function
-function viewLogs() {
-const appName = document.getElementById('appNameInput').value;
-window.location.href = `/dashboard/bot-details/${appName}`;
-}
-        document.addEventListener('DOMContentLoaded', function() {
-            const appNameInput = document.getElementById('appNameInput');
-            const deployBtn = document.getElementById('deployBtn');
-            const deployForm = document.getElementById('deployForm');
-            const validationMessage = document.querySelector('.validation-message');
-            const validationStatus = document.querySelector('.validation-status');
-            const spinner = validationStatus.querySelector('.spinner');
-            const successIcon = validationStatus.querySelector('.status-icon.success');
-            const errorIcon = validationStatus.querySelector('.status-icon.error');
-            const warningIcon = validationStatus.querySelector('.status-icon.warning');
-            const strengthMeter = document.querySelector('.strength-meter-fill');
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            const suggestionsContainer = document.getElementById('suggestions');
-         
-            let debounceTimer;
-            let isFormSubmitting = false;
-
-    // Enhanced validation rules
-    const nameRules = {
-                pattern: /^[a-z][a-z0-9-]*[a-z0-9]$/,
-                maxLength: 30,
-                minLength: 3,
-                noConsecutiveHyphens: /--/,
-                allowedChars: /^[a-z0-9-]+$/
-            };
-// Common words to generate suggestions
-const commonWords = ['app', 'bot', 'api', 'service', 'prod', 'dev', 'staging', 'test'];
-
-function generateSuggestions(baseWord) {
-    const suggestions = [];
-    if (!baseWord) return suggestions;
-
-    const sanitizedBase = baseWord.toLowerCase().replace(/[^a-z0-9]/g, '');
-    if (sanitizedBase.length < 2) return suggestions;
-
-    commonWords.forEach(word => {
-        suggestions.push(`${sanitizedBase}-${word}`);
-        suggestions.push(`${word}-${sanitizedBase}`);
-    });
-
-    // Add random number suggestions
-    for (let i = 0; i < 3; i++) {
-        suggestions.push(`${sanitizedBase}-${Math.floor(Math.random() * 1000)}`);
-    }
-
-    return [...new Set(suggestions)].slice(0, 5); // Return unique suggestions, max 5
-}
-
-function updateSuggestions(value) {
-    const suggestions = generateSuggestions(value);
-    suggestionsContainer.innerHTML = suggestions.map(suggestion => 
-        `<span class="suggestion-item">${suggestion}</span>`
-    ).join('');
-
-    // Add click handlers
-    document.querySelectorAll('.suggestion-item').forEach(item => {
-        item.addEventListener('click', () => {
-            appNameInput.value = item.textContent;
-            validateAppName(item.textContent);
-        });
-    });
-}
-
-function updateRequirements(value) {
-    const requirements = {
-        length: value.length >= nameRules.minLength && value.length <= nameRules.maxLength,
-        start: /^[a-z]/.test(value),
-        characters: nameRules.allowedChars.test(value),
-        hyphens: !nameRules.noConsecutiveHyphens.test(value) && 
-                !value.startsWith('-') && 
-                !value.endsWith('-')
-    };
-
-    Object.entries(requirements).forEach(([key, valid]) => {
-        const element = document.querySelector(`[data-requirement="${key}"]`);
-        element.classList.remove('valid', 'invalid');
-        element.classList.add(valid ? 'valid' : 'invalid');
-        element.querySelector('i').className = `fas ${valid ? 'fa-check-circle' : 'fa-times-circle'}`;
-    });
-
-    // Update strength meter
-    const validCount = Object.values(requirements).filter(Boolean).length;
-    const strength = (validCount / Object.keys(requirements).length) * 100;
-    strengthMeter.style.width = `${strength}%`;
-
-    return Object.values(requirements).every(Boolean);
-}
-            function showValidationStatus(type, message) {
-                // Hide all status indicators
-                spinner.style.display = 'none';
-                successIcon.style.display = 'none';
-                errorIcon.style.display = 'none';
-                warningIcon.style.display = 'none';
-                
-                // Show validation message
-                validationMessage.style.display = 'block';
-                validationMessage.className = `validation-message ${type}`;
-                validationMessage.textContent = message;
-
-                // Show appropriate icon and set button state
-                switch(type) {
-                    case 'success':
-                        successIcon.style.display = 'inline-block';
-                        deployBtn.disabled = false;
-                        break;
-                    case 'error':
-                    case 'warning':
-                        if (type === 'error') errorIcon.style.display = 'inline-block';
-                        if (type === 'warning') warningIcon.style.display = 'inline-block';
-                        deployBtn.disabled = true;
-                        break;
-                }
-
-                validationStatus.style.display = 'block';
-            }
-
-            function startValidation() {
-                validationStatus.style.display = 'block';
-                spinner.style.display = 'inline-block';
-                successIcon.style.display = 'none';
-                errorIcon.style.display = 'none';
-                warningIcon.style.display = 'none';
-                validationMessage.style.display = 'none';
-                deployBtn.disabled = true;
-            }
-
-            async function validateAppName(value) {
-                // Convert to lowercase and trim
-                value = value.toLowerCase().trim();
-                appNameInput.value = value;
-
-                // Start validation process
-                startValidation();
-
-                // Basic validation checks
-                if (!value) {
-                    showValidationStatus('error', 'App name is required');
-                    return false;
-                }
-
-                if (value.length < nameRules.minLength) {
-                    showValidationStatus('error', 'App name must be at least 3 characters');
-                    return false;
-                }
-
-                if (value.length > nameRules.maxLength) {
-                    showValidationStatus('error', `App name must be no more than ${nameRules.maxLength} characters`);
-                    return false;
-                }
-
-                if (!nameRules.pattern.test(value)) {
-                    showValidationStatus('error', 'Only lowercase letters, numbers, and hyphens are allowed');
-                    return false;
-                }
-
-                        // Update requirements UI
-                        const requirementsMet = updateRequirements(value);
-                
-                if (!requirementsMet) {
-                    return false;
-                }
-
-                try {
-                    const response = await fetch(`/api/check-app-name?name=${value}-td`);
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    
-                    const data = await response.json();
-                    
-                    if (data.error) {
-                        showValidationStatus('error', data.error);
-                        return false;
-                    } else if (data.exists) {
-                        showValidationStatus('error', 'This app name is already taken');
-                        updateSuggestions(value); // Show suggestions for taken names
-                        return false;
-                    } else if (data.reserved) {
-                        showValidationStatus('warning', 'This name is reserved');
-                        updateSuggestions(value);
-                        return false;
-                    } else {
-                        showValidationStatus('success', 'App name is available');
-                        suggestionsContainer.innerHTML = ''; // Clear suggestions on success
-                        return true;
-                    }
-                } catch (error) {
-                    console.error('Error checking app name:', error);
-                    showValidationStatus('error', 'Error checking app name availability');
-                    return false;
-                }
-            }
-
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add the ad overlay HTML - with explicit dimensions for ad container
+        const adOverlayHTML = `
+        <div id="adOverlay" class="ad-overlay">
+          <div class="ad-container">
+            <div class="ad-header">
+              <h3>Please watch this ad to deploy your bot</h3>
+              <div class="timer-container">Time remaining: <span id="adTimer">10</span>s</div>
+            </div>
+            
+            <div class="ad-content">
+              <!-- Reserved space for ad - will be inserted dynamically -->
+              <div id="adPlaceholder" style="min-width:300px; min-height:250px; width:100%; display:flex; justify-content:center; align-items:center;">
+                <div>Loading advertisement...</div>
+              </div>
+            </div>
+            
+            <div class="ad-footer">
+              <button id="continueDeployment" class="action-btn" disabled>
+                <i class="fas fa-rocket"></i>
+                <span>Continue Deployment</span>
+              </button>
+              <button id="skipAd" class="secondary-btn">
+                <i class="fas fa-times"></i>
+                <span>Skip Ad & Cancel Deployment</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        `;
         
+        // Add the CSS styles
+        const adStyles = `
+        .ad-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.8);
+          display: none;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+        }
+        
+        .ad-container {
+          background-color: white;
+          border-radius: 8px;
+          width: 90%;
+          max-width: 728px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+        }
+        
+        .ad-header {
+          background-color: #f8f9fa;
+          padding: 15px 20px;
+          border-bottom: 1px solid #e9ecef;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        
+        .ad-header h3 {
+          margin: 0;
+          color: #343a40;
+        }
+        
+        .timer-container {
+          font-weight: bold;
+          color: #007bff;
+        }
+        
+        .ad-content {
+          padding: 20px;
+          min-height: 250px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .ad-footer {
+          padding: 15px 20px;
+          border-top: 1px solid #e9ecef;
+          display: flex;
+          justify-content: space-between;
+          gap: 10px;
+        }
+        
+        .action-btn {
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          padding: 8px 16px;
+          cursor: pointer;
+          font-weight: bold;
+          display: flex;
+          align-items: center;
+          gap: 5px;
+        }
+        
+        .action-btn:disabled {
+          background-color: #6c757d;
+          cursor: not-allowed;
+        }
+        
+        .secondary-btn {
+          background-color: #f8f9fa;
+          color: #343a40;
+          border: 1px solid #ced4da;
+          border-radius: 4px;
+          padding: 8px 16px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 5px;
+        }
+        
+        .secondary-btn:hover {
+          background-color: #e9ecef;
+        }
+        `;
+        
+        // Insert the ad overlay HTML and styles
+        document.querySelector('main').insertAdjacentHTML('beforeend', adOverlayHTML);
+        
+        const styleElement = document.createElement('style');
+        styleElement.textContent = adStyles;
+        document.head.appendChild(styleElement);
 
-          
- // Update the showResponseMessage function
-function showResponseMessage(type, data) {
-const responseMessage = document.getElementById('responseMessage');
-const statusIndicator = responseMessage.querySelector('.status-indicator');
-const statusText = responseMessage.querySelector('.status-text');
-const deploymentDetails = responseMessage.querySelector('.deployment-details');
+        // Update the viewLogs function
+        function viewLogs() {
+            const appName = document.getElementById('appNameInput').value;
+            window.location.href = `/dashboard/bot-details/${appName}`;
+        }
 
-responseMessage.className = `response-message ${type}`;
+        const appNameInput = document.getElementById('appNameInput');
+        const deployBtn = document.getElementById('deployBtn');
+        const deployForm = document.getElementById('deployForm');
+        const validationMessage = document.querySelector('.validation-message');
+        const validationStatus = document.querySelector('.validation-status');
+        const spinner = validationStatus.querySelector('.spinner');
+        const successIcon = validationStatus.querySelector('.status-icon.success');
+        const errorIcon = validationStatus.querySelector('.status-icon.error');
+        const warningIcon = validationStatus.querySelector('.status-icon.warning');
+        const strengthMeter = document.querySelector('.strength-meter-fill');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const suggestionsContainer = document.getElementById('suggestions');
+        const adOverlay = document.getElementById('adOverlay');
+        const continueDeployBtn = document.getElementById('continueDeployment');
+        const skipAdBtn = document.getElementById('skipAd');
+        const adTimerElement = document.getElementById('adTimer');
+        const adPlaceholder = document.getElementById('adPlaceholder');
+         
+        let debounceTimer;
+        let isFormSubmitting = false;
+        let countdown = 10;
+        let countdownInterval;
+        let adLoaded = false;
 
-if (type === 'success') {
-    statusIndicator.style.backgroundColor = 'var(--success)';
-    // Create deployment details content
-    deploymentDetails.innerHTML = `
-        <div class="deployment-info">
-            <p><strong>Status:</strong> ${data.message}</p>
-            <p><strong>Deployment Cost:</strong> ${data.coinsDeducted} coins</p>
-            <p><strong>Remaining Balance:</strong> ${data.remainingCoins} coins</p>
-        </div>
-        <div class="deployment-actions">
-            <button class="action-btn" onclick="viewLogs()">
-                <i class="fas fa-list-alt"></i>
-                View Logs
-            </button>
-        </div>
-    `;
-    deploymentDetails.style.display = 'block';
-} else {
-    statusIndicator.style.backgroundColor = 'var(--error)';
-    statusText.textContent = data.message || 'Deployment Failed!';
-    deploymentDetails.style.display = 'none';
-}
+        // Enhanced validation rules
+        const nameRules = {
+            pattern: /^[a-z][a-z0-9-]*[a-z0-9]$/,
+            maxLength: 30,
+            minLength: 3,
+            noConsecutiveHyphens: /--/,
+            allowedChars: /^[a-z0-9-]+$/
+        };
+        
+        // Function to load AdSense ad
+        function loadAdSense() {
+            // Clear the placeholder
+            adPlaceholder.innerHTML = '';
+            
+            // Create AdSense script
+            const adScript = document.createElement('script');
+            adScript.async = true;
+            adScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5279011797376172";
+            adScript.crossOrigin = "anonymous";
+            adPlaceholder.appendChild(adScript);
+            
+            // Create AdSense ins element
+            const adIns = document.createElement('ins');
+            adIns.className = "adsbygoogle";
+            adIns.style.display = "block";
+            adIns.setAttribute("data-ad-client", "ca-pub-5279011797376172");
+            adIns.setAttribute("data-ad-slot", "3932521472");
+            adIns.setAttribute("data-ad-format", "auto");
+            adIns.setAttribute("data-full-width-responsive", "true");
+            adIns.style.width = "100%";
+            adIns.style.height = "250px";  // Explicit height
+            adPlaceholder.appendChild(adIns);
+            
+            // Create push script
+            const pushScript = document.createElement('script');
+            pushScript.textContent = "(adsbygoogle = window.adsbygoogle || []).push({});";
+            adPlaceholder.appendChild(pushScript);
+            
+            // Handle ad errors
+            window.addEventListener('error', function(e) {
+                if (e.message && e.message.includes('adsbygoogle')) {
+                    console.warn('Ad error detected:', e.message);
+                    adPlaceholder.innerHTML = '<div>Advertisement failed to load. You can still continue after the timer.</div>';
+                }
+            });
+        }
+        
+        // Common words to generate suggestions
+        const commonWords = ['app', 'bot', 'api', 'service', 'prod', 'dev', 'staging', 'test'];
 
-responseMessage.style.display = 'block';
-}
+        function generateSuggestions(baseWord) {
+            const suggestions = [];
+            if (!baseWord) return suggestions;
 
+            const sanitizedBase = baseWord.toLowerCase().replace(/[^a-z0-9]/g, '');
+            if (sanitizedBase.length < 2) return suggestions;
 
-
-            // Input event listener with debounce
-            appNameInput.addEventListener('input', (e) => {
-                clearTimeout(debounceTimer);
-                deployBtn.disabled = true;
-                updateRequirements(e.target.value);
-                
-                debounceTimer = setTimeout(() => {
-                    validateAppName(e.target.value);
-                }, 300);
+            commonWords.forEach(word => {
+                suggestions.push(`${sanitizedBase}-${word}`);
+                suggestions.push(`${word}-${sanitizedBase}`);
             });
 
+            // Add random number suggestions
+            for (let i = 0; i < 3; i++) {
+                suggestions.push(`${sanitizedBase}-${Math.floor(Math.random() * 1000)}`);
+            }
 
+            return [...new Set(suggestions)].slice(0, 5); // Return unique suggestions, max 5
+        }
 
-            /////////////////////////////////////
-            // Form submission handling
-           // Form submission handling with AJAX
- // Convert FormData to JSON
- function formDataToJson(formData) {
-    const jsonObject = {};
-    formData.forEach((value, key) => {
-        jsonObject[key] = value;
-    });
-    return JSON.stringify(jsonObject);
-}
+        function updateSuggestions(value) {
+            const suggestions = generateSuggestions(value);
+            suggestionsContainer.innerHTML = suggestions.map(suggestion => 
+                `<span class="suggestion-item">${suggestion}</span>`
+            ).join('');
 
-// Update the form submission handler
-deployForm.addEventListener('submit', async function(e) {
-e.preventDefault();
-deployBtn.disabled = true;
-loadingOverlay.style.display = 'flex';
+            // Add click handlers
+            document.querySelectorAll('.suggestion-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    appNameInput.value = item.textContent;
+                    validateAppName(item.textContent);
+                });
+            });
+        }
 
-const formData = new FormData(deployForm);
-const jsonData = formDataToJson(formData);
+        function updateRequirements(value) {
+            const requirements = {
+                length: value.length >= nameRules.minLength && value.length <= nameRules.maxLength,
+                start: /^[a-z]/.test(value),
+                characters: nameRules.allowedChars.test(value),
+                hyphens: !nameRules.noConsecutiveHyphens.test(value) && 
+                        !value.startsWith('-') && 
+                        !value.endsWith('-')
+            };
 
-try {
-    const response = await fetch('/deploy', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: jsonData
-    });
+            Object.entries(requirements).forEach(([key, valid]) => {
+                const element = document.querySelector(`[data-requirement="${key}"]`);
+                element.classList.remove('valid', 'invalid');
+                element.classList.add(valid ? 'valid' : 'invalid');
+                element.querySelector('i').className = `fas ${valid ? 'fa-check-circle' : 'fa-times-circle'}`;
+            });
 
-    const data = await response.json();
+            // Update strength meter
+            const validCount = Object.values(requirements).filter(Boolean).length;
+            const strength = (validCount / Object.keys(requirements).length) * 100;
+            strengthMeter.style.width = `${strength}%`;
 
-    if (data.success) {
-        showResponseMessage('success', {
-            message: data.message,
-            coinsDeducted: data.coinsDeducted,
-            remainingCoins: data.remainingCoins
-        });
-        await updateCoinBalance();
-    } else {
-        showResponseMessage('error', { message: data.message || 'Deployment Failed!' });
-    }
-} catch (error) {
-    console.error('Error during deployment:', error);
-    showResponseMessage('error', { message: 'An error occurred during deployment. Please try again.' });
-} finally {
-    deployBtn.disabled = false;
-    loadingOverlay.style.display = 'none';
-}
-});
+            return Object.values(requirements).every(Boolean);
+        }
 
-            // Initialize
+        function showValidationStatus(type, message) {
+            // Hide all status indicators
+            spinner.style.display = 'none';
+            successIcon.style.display = 'none';
+            errorIcon.style.display = 'none';
+            warningIcon.style.display = 'none';
+            
+            // Show validation message
+            validationMessage.style.display = 'block';
+            validationMessage.className = `validation-message ${type}`;
+            validationMessage.textContent = message;
+
+            // Show appropriate icon and set button state
+            switch(type) {
+                case 'success':
+                    successIcon.style.display = 'inline-block';
+                    deployBtn.disabled = false;
+                    break;
+                case 'error':
+                case 'warning':
+                    if (type === 'error') errorIcon.style.display = 'inline-block';
+                    if (type === 'warning') warningIcon.style.display = 'inline-block';
+                    deployBtn.disabled = true;
+                    break;
+            }
+
+            validationStatus.style.display = 'block';
+        }
+
+        function startValidation() {
+            validationStatus.style.display = 'block';
+            spinner.style.display = 'inline-block';
+            successIcon.style.display = 'none';
+            errorIcon.style.display = 'none';
+            warningIcon.style.display = 'none';
+            validationMessage.style.display = 'none';
             deployBtn.disabled = true;
-            updateRequirements('');
+        }
+
+        async function validateAppName(value) {
+            // Convert to lowercase and trim
+            value = value.toLowerCase().trim();
+            appNameInput.value = value;
+
+            // Start validation process
+            startValidation();
+
+            // Basic validation checks
+            if (!value) {
+                showValidationStatus('error', 'App name is required');
+                return false;
+            }
+
+            if (value.length < nameRules.minLength) {
+                showValidationStatus('error', 'App name must be at least 3 characters');
+                return false;
+            }
+
+            if (value.length > nameRules.maxLength) {
+                showValidationStatus('error', `App name must be no more than ${nameRules.maxLength} characters`);
+                return false;
+            }
+
+            if (!nameRules.pattern.test(value)) {
+                showValidationStatus('error', 'Only lowercase letters, numbers, and hyphens are allowed');
+                return false;
+            }
+
+            // Update requirements UI
+            const requirementsMet = updateRequirements(value);
+            
+            if (!requirementsMet) {
+                return false;
+            }
+
+            try {
+                const response = await fetch(`/api/check-app-name?name=${value}-td`);
+                if (!response.ok) throw new Error('Network response was not ok');
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    showValidationStatus('error', data.error);
+                    return false;
+                }
+
+                // Handle detailed availability checks
+                if (!data.isAvailable) {
+                    const { details } = data;
+                    
+                    // Show specific error messages based on why it's unavailable
+                    if (details.existsInDatabase) {
+                        showValidationStatus('error', 'This app name is already taken in our system');
+                        updateSuggestions(value);
+                        return false;
+                    }
+                    
+                    if (details.isReserved) {
+                        showValidationStatus('warning', 'This name is reserved and cannot be used');
+                        updateSuggestions(value);
+                        return false;
+                    }
+                    
+                    if (details.existsInHeroku) {
+                        showValidationStatus('error', 'This app name is already taken in Heroku');
+                        updateSuggestions(value);
+                        return false;
+                    }
+
+                    // Generic unavailability message if no specific reason is provided
+                    showValidationStatus('error', data.message || 'This app name is unavailable');
+                    updateSuggestions(value);
+                    return false;
+                }
+
+                // If we get here, the name is available everywhere
+                showValidationStatus('success', 'App name is available');
+                suggestionsContainer.innerHTML = ''; // Clear suggestions on success
+                return true;
+
+            } catch (error) {
+                console.error('Error checking app name:', error);
+                showValidationStatus('error', 'Error checking app name availability');
+                return false;
+            }
+        }
+          
+        // Update the showResponseMessage function
+        function showResponseMessage(type, data) {
+            const responseMessage = document.getElementById('responseMessage');
+            const statusIndicator = responseMessage.querySelector('.status-indicator');
+            const statusText = responseMessage.querySelector('.status-text');
+            const deploymentDetails = responseMessage.querySelector('.deployment-details');
+
+            responseMessage.className = `response-message ${type}`;
+
+            if (type === 'success') {
+                statusIndicator.style.backgroundColor = 'var(--success)';
+                statusText.textContent = 'Deployment Successful!';
+                // Create deployment details content
+                deploymentDetails.innerHTML = `
+                    <div class="deployment-info">
+                        <p><strong>Status:</strong> ${data.message}</p>
+                        <p><strong>Deployment Cost:</strong> ${data.coinsDeducted} coins</p>
+                        <p><strong>Remaining Balance:</strong> ${data.remainingCoins} coins</p>
+                    </div>
+                    <div class="deployment-actions">
+                        <button class="action-btn" onclick="viewLogs()">
+                            <i class="fas fa-list-alt"></i>
+                            View Logs
+                        </button>
+                    </div>
+                `;
+                deploymentDetails.style.display = 'block';
+            } else {
+                statusIndicator.style.backgroundColor = 'var(--error)';
+                statusText.textContent = data.message || 'Deployment Failed!';
+                deploymentDetails.style.display = 'none';
+            }
+
+            responseMessage.style.display = 'block';
+        }
+
+        // Input event listener with debounce
+        appNameInput.addEventListener('input', (e) => {
+            clearTimeout(debounceTimer);
+            deployBtn.disabled = true;
+            updateRequirements(e.target.value);
+            
+            debounceTimer = setTimeout(() => {
+                validateAppName(e.target.value);
+            }, 300);
         });
-        async function updateCoinBalance() {
-    try {
-        const response = await fetch('/user-coins');
-        const data = await response.json();
-        coinBalance.textContent = `${data.coins} Coins`;
-    } catch (error) {
-        console.error('Error fetching coin balance:', error);
-    }
-}
 
-updateCoinBalance();
+        // Convert FormData to JSON
+        function formDataToJson(formData) {
+            const jsonObject = {};
+            formData.forEach((value, key) => {
+                jsonObject[key] = value;
+            });
+            return JSON.stringify(jsonObject);
+        }
 
+        // NEW CODE: Modified form submission handler to show ad first
+        deployForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate form before showing ad
+            const isValid = validateAppName(appNameInput.value);
+            
+            if (isValid) {
+                // Show ad overlay first
+                adOverlay.style.display = 'flex';
+                
+                // Once overlay is visible, load the ad
+                setTimeout(() => {
+                    if (!adLoaded) {
+                        loadAdSense();
+                        adLoaded = true;
+                    }
+                    
+                    // Start countdown
+                    countdown = 10;
+                    adTimerElement.textContent = countdown;
+                    continueDeployBtn.disabled = true;
+                    
+                    countdownInterval = setInterval(() => {
+                        countdown--;
+                        adTimerElement.textContent = countdown;
+                        
+                        if (countdown <= 0) {
+                            clearInterval(countdownInterval);
+                            continueDeployBtn.disabled = false;
+                        }
+                    }, 1000);
+                }, 100); // Small delay to ensure the overlay is visible
+            }
+        });
         
-    </script>
+        // Continue deployment after watching the ad
+        continueDeployBtn.addEventListener('click', async function() {
+            // Hide ad overlay
+            adOverlay.style.display = 'none';
+            clearInterval(countdownInterval);
+            
+            // Continue with actual deployment
+            await submitDeployment();
+        });
+        
+        // Skip ad and cancel deployment
+        skipAdBtn.addEventListener('click', function() {
+            // Show confirmation dialog
+            if (confirm('Are you sure you want to skip the ad? Your bot will not be deployed.')) {
+                adOverlay.style.display = 'none';
+                clearInterval(countdownInterval);
+                
+                // Show message that deployment was cancelled
+                showResponseMessage('error', { message: 'Deployment cancelled. You skipped the ad.' });
+            }
+        });
+        
+        // Actual deployment logic (extracted from original form submission)
+        async function submitDeployment() {
+            deployBtn.disabled = true;
+            loadingOverlay.style.display = 'flex';
+            
+            const formData = new FormData(deployForm);
+            const jsonData = formDataToJson(formData);
+            
+            try {
+                const response = await fetch('/deploy', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: jsonData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResponseMessage('success', {
+                        message: data.message,
+                        coinsDeducted: data.coinsDeducted,
+                        remainingCoins: data.remainingCoins
+                    });
+                    await updateCoinBalance();
+                } else {
+                    showResponseMessage('error', { message: data.message || 'Deployment Failed!' });
+                }
+            } catch (error) {
+                console.error('Error during deployment:', error);
+                showResponseMessage('error', { message: 'An error occurred during deployment. Please try again.' });
+            } finally {
+                deployBtn.disabled = false;
+                loadingOverlay.style.display = 'none';
+            }
+        }
+
+        // Initialize
+        deployBtn.disabled = true;
+        updateRequirements('');
+        
+        async function updateCoinBalance() {
+            try {
+                const response = await fetch('/user-coins');
+                const data = await response.json();
+                document.getElementById('coinBalance').textContent = `${data.coins} Coins`;
+            } catch (error) {
+                console.error('Error fetching coin balance:', error);
+            }
+        }
+
+        updateCoinBalance();
+    });
+
+    // Keep this outside if it's in your original code
+    function viewLogs() {
+        const appName = document.getElementById('appNameInput').value;
+        window.location.href = `/dashboard/bot-details/${appName}`;
+    }
+</script>
 <script src="https://cdn.talkdrove.com/host/js/main/app.js"></script>
 </body>
 </html>
