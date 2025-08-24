@@ -37,9 +37,9 @@ router.post('/request-password-reset', async (req, res) => {
         });
 
         const emailTemplate = {
-            from: '"TalkDrove Security" <msg@talkdrove.com>',
+            from: '"Ernest Tech House  Security" <ernesttechhousesupport@gmail.com>',
             to: email,
-            subject: 'Password Reset Request - TalkDrove',
+            subject: 'Password Reset Request - Ernest Tesch house ',
             html: `
                 <!DOCTYPE html>
                 <html>
@@ -78,7 +78,7 @@ router.post('/request-password-reset', async (req, res) => {
                                         <td style="padding: 20px 40px 40px; text-align: center; border-top: 1px solid #eeeeee;">
                                             <p style="margin: 0; font-family: Arial, sans-serif; font-size: 12px; color: #999999;">
                                                 If you did not request this password reset, please ignore this email or contact support.
-                                                <br>© ${new Date().getFullYear()} TalkDrove. All rights reserved.
+                                                <br>© ${new Date().getFullYear()} Ernest Tech House . All rights reserved.
                                             </p>
                                         </td>
                                     </tr>

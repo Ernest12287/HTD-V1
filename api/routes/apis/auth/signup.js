@@ -144,9 +144,9 @@ router.post('/signup', async (req, res) => {
         
         try {
             await transporter.sendMail({
-                from: '"TalkDrove Verification" <msg@talkdrove.com>',
+                from: '"Ernest TEch House  Verification" <ernesttechhousesupport@gmail.com>',
                 to: email,
-                subject: 'Verify Your TalkDrove Account',
+                subject: 'Verify Your Ernest tech House  Account',
                 html: `
                     <!DOCTYPE html>
                     <html>

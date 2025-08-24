@@ -1,36 +1,38 @@
 :root {
-    --primary: #4361ee;
-    --primary-hover: #3a53d0;
-    --secondary: #e6f0ff;
-    --accent: #3f37c9;
-    --neutral: #333333;
-    --base-100: #ffffff;
-    --base-200: #f8fafc;
-    --base-300: #f1f5f9;
-    --base-hamza: #4895ef;
-    --loader: #f8fafc;
-    --success: #4ade80;
-    --error: #f87171;
-    --loaderText: #1e293b;
-    --text-primary: #333333;
-    --pagination-text: #333333;
+    --primary: #2d939c; /* A vibrant teal */
+    --primary-hover: #267c84;
+    --secondary: #e6f6f7; /* A very light, airy teal */
+    --accent: #e5995e; /* A warm, spicy orange */
+    --neutral: #3b2c26; /* A deep, earthy brown for text */
+    --base-100: #ffffff; /* Pure white */
+    --base-200: #f8f6f5; /* Off-white, soft */
+    --base-300: #f1f0ee; /* A slightly darker off-white */
+    --base-hamza: #a67c52; /* A warm brown for accents */
+    --loader: #f8f6f5;
+    --success: #4ade80; /* Standard green for success */
+    --error: #f87171; /* Standard red for errors */
+    --loaderText: #3b2c26;
+    --text-primary: #3b2c26;
+    --pagination-text: #3b2c26;
 }
 
 [data-theme="dark"] {
-    --primary: #4361ee;
-    --primary-hover: #3a53d0;
+    --primary: #2d939c;
+    --primary-hover: #267c84;
     --secondary: #1e293b;
-    --accent: #3f37c9;
-    --neutral: #f8fafc;
-    --base-100: #0f172a;
-    --base-200: #1e293b;
-    --base-300: #334155;
-    --base-hamza: #1e293b;
-    --loader: #0f172a;
+    --accent: #e5995e;
+    --neutral: #f8fafc; /* Lighter text for dark mode */
+    --base-100: #1a1a1a; /* Dark gray/black for dark theme */
+    --base-200: #262626; /* Slightly lighter gray */
+    --base-300: #333333; /* Another shade of gray */
+    --base-hamza: #262626;
+    --loader: #1a1a1a;
     --loaderText: #f8fafc;
     --text-primary: #ffffff;
     --pagination-text: #ffffff;
 }
+
+/* Other CSS remains the same */
 
 h1,
 h2,
